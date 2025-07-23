@@ -1,0 +1,494 @@
+{
+    "nodes": [
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "name",
+                "value": "Alice"
+              },
+              {
+                "name": "firstName",
+                "value": "Alice"
+              },
+              {
+                "name": "lastName",
+                "value": "Smith"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "4597ef57-5c03-46b3-b188-fe0939cb8349",
+        "name": "Example Data",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          64,
+          -256
+        ],
+        "notes": "Provides example input data for the workflow."
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "intro",
+                "value": "Welcome to the n8n Expressions Tutorial! This workflow demonstrates different ways to use expressions in n8n nodes. Expressions let you reference data, perform calculations, and transform values dynamically. Learn more: https://docs.n8n.io/code/expressions/"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "6b9f8afc-98a7-471e-8e78-0953b2919bb9",
+        "name": "Introduction",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          288,
+          -256
+        ],
+        "notes": "This node introduces the workflow and provides a link to the n8n Expressions documentation."
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "greeting",
+                "value": "=Hello, {{ $json[\"name\"] || 'User' }}!"
+              },
+              {
+                "name": "staticAndDynamic",
+                "value": "=Today is {{ $now.toFormat('cccc, dd LLL yyyy') }}."
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "07687930-84cf-42ba-bfd1-46d2ab9fe611",
+        "name": "Set: Basic Expressions",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          512,
+          -256
+        ],
+        "notes": "Demonstrates referencing input data and combining static text with expressions. See: https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "id": "506fe924-02ed-4c34-9762-0419a1a7913f",
+        "name": "Code: Advanced Expressions",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 1,
+        "position": [
+          736,
+          -256
+        ],
+        "notes": "Shows how to use JavaScript and n8n helper functions in the Code node. Docs: https://docs.n8n.io/code/code-node/"
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "date7DaysAgo",
+                "value": "={{ $today.minus(7, 'days').toISODate() }}"
+              },
+              {
+                "name": "nowISO",
+                "value": "={{ $now.toISO() }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "74c9a0f9-8503-4acf-b762-02c62725a9f8",
+        "name": "Set: Date/Time Expressions",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          960,
+          -256
+        ],
+        "notes": "Demonstrates using Luxon for date calculations. Docs: https://docs.n8n.io/code/expressions/#date-and-time"
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "fromPreviousNode",
+                "value": "={{ $node[\"Set: Basic Expressions\"].json[\"greeting\"] }}"
+              },
+              {
+                "name": "fromCodeNode",
+                "value": "={{ $json.firstName }} {{ $json.lastName }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "23fd33e5-0314-407e-a580-bfa407657f3a",
+        "name": "Set: Reference Other Nodes",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          1184,
+          -256
+        ],
+        "notes": "Shows how to reference data from previous nodes. Docs: https://docs.n8n.io/code/expressions/#accessing-data-from-other-nodes"
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "aiEmail",
+                "value": "={{ $fromAI(\"output\") }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "192fd120-3067-4e25-8483-58a813d03675",
+        "name": "Set: AI Function",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          2032,
+          -256
+        ],
+        "notes": "Demonstrates using the $fromAI() function for AI-powered values. Docs: https://docs.n8n.io/advanced-ai/examples/using-the-fromai-function/"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Generate a realistic email address for the user named {{$json.name}} {{$json.lastName}}. Only return the email address as plain text.",
+          "options": {}
+        },
+        "id": "299b4ce3-8d01-4075-b293-83934d5563a3",
+        "name": "AI Agent (Email)",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          1408,
+          -256
+        ],
+        "notes": "Uses OpenRouter to generate a realistic email address for the user."
+      },
+      {
+        "parameters": {
+          "model": "agentica-org/deepcoder-14b-preview:free",
+          "options": {}
+        },
+        "id": "d57e5e26-73d3-4a78-870a-b5be0b3ceef9",
+        "name": "OpenRouter Chat Model",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          1504,
+          -32
+        ],
+        "credentials": {
+          "openRouterApi": {
+            "id": "iFLc1DvKzkSFUMi8",
+            "name": "OpenRouter account"
+          }
+        },
+        "notes": "OpenRouter LLM for AI Agent. Requires OpenRouter API credentials."
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "aiEmailDemo",
+                "value": "={{ $json.output }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "21ab4631-f13f-489b-a094-1d791cbd02d5",
+        "name": "Set: AI Email Output",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          1808,
+          -256
+        ],
+        "notes": "Shows the AI-generated email address from OpenRouter."
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "invalidSyntax",
+                "value": "{{ $json. }}"
+              },
+              {
+                "name": "multiLineInvalid",
+                "value": "{{\n  let a = 1;\n  let b = 2;\n  a + b;\n}}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "3b86c089-f709-4cbe-8dce-e5b362de0401",
+        "name": "Set: Common Expression Errors",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          2256,
+          -256
+        ],
+        "notes": "Shows common mistakes in expressions. Docs: https://docs.n8n.io/code/expressions/common-issues/"
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "outputSummary",
+                "value": "This is the end of the tutorial. Review the output from each node to see how expressions work in practice!"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "80dcd6db-d260-40e5-9135-744be06cee9d",
+        "name": "Output",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [
+          2480,
+          -256
+        ],
+        "notes": "Final node summarizing the tutorial."
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -224,
+          -160
+        ],
+        "id": "aa9f7959-0dc8-49cf-be5c-b84064c0e63a",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "aiEmailFromFunction",
+                "value": "={{ $fromAI('email') }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "fromai-demo-set",
+        "name": "Set: $fromAI() Demo",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [368, 64],
+        "notes": "Demonstrates using $fromAI() to generate an email address."
+      },
+      {
+        "parameters": {
+          "values": {
+            "string": [
+              {
+                "name": "aiEmailFromFunctionOutput",
+                "value": "={{ $json[\"aiEmailFromFunction\"] }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "fromai-demo-output",
+        "name": "Set: $fromAI() Output",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 1,
+        "position": [672, 64],
+        "notes": "Displays the output of $fromAI() demo."
+      }
+    ],
+    "connections": {
+      "Example Data": {
+        "main": [
+          [
+            {
+              "node": "Introduction",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Set: $fromAI() Demo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Introduction": {
+        "main": [
+          [
+            {
+              "node": "Set: Basic Expressions",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: Basic Expressions": {
+        "main": [
+          [
+            {
+              "node": "Code: Advanced Expressions",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code: Advanced Expressions": {
+        "main": [
+          [
+            {
+              "node": "Set: Date/Time Expressions",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: Date/Time Expressions": {
+        "main": [
+          [
+            {
+              "node": "Set: Reference Other Nodes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: Reference Other Nodes": {
+        "main": [
+          [
+            {
+              "node": "AI Agent (Email)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: AI Function": {
+        "main": [
+          [
+            {
+              "node": "Set: Common Expression Errors",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent (Email)": {
+        "main": [
+          [
+            {
+              "node": "Set: AI Email Output",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent (Email)",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: AI Email Output": {
+        "main": [
+          [
+            {
+              "node": "Set: AI Function",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: Common Expression Errors": {
+        "main": [
+          [
+            {
+              "node": "Output",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Example Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: $fromAI() Demo": {
+        "main": [
+          [
+            {
+              "node": "Set: $fromAI() Output",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set: $fromAI() Output": {
+        "main": [
+          [
+            {
+              "node": "Output",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "pinData": {},
+    "meta": {
+      "templateCredsSetupCompleted": true,
+      "instanceId": "16cd5b949c99a108979d0725cd4ca475fb606e27c1cd0979968283a26e4f00cd"
+    }
+  }
